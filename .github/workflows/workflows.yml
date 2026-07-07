@@ -26,3 +26,7 @@ jobs:
     - name: Deploy static files to S3
       run: |
         aws s3 sync . s3://logan-cloud-resume-frontend --delete --exclude ".git*" --exclude ".github*"
+    # 4. Wipe the CloudFront cache so changes are live instantly
+    - name: Invalidate CloudFront Cache
+      run: |
+        aws cloudfront create-invalidation --distribution-id E9THC5BV7JIGSY --paths "/*"
