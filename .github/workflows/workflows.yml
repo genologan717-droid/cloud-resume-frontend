@@ -1,0 +1,28 @@
+name: Deploy Frontend to AWS
+
+on:
+  push:
+    branches:
+      - main # Triggers the workflow every time you push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Pull down a copy of your HTML/CSS code onto the virtual machine
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    # 2. Log into your AWS account using the repository secrets we set up
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1 # Change this if your bucket is in a different region (e.g., us-east-2)
+
+    # 3. Synchronize your local files directly with your S3 Bucket
+    - name: Deploy static files to S3
+      run: |
+        aws s3 sync . s3://logan-cloud-resume-frontend --delete --exclude ".git*" --exclude ".github*"
