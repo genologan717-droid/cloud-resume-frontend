@@ -29,4 +29,4 @@ jobs:
     # 4. Wipe the CloudFront cache so changes are live instantly
     - name: Invalidate CloudFront Cache
       run: |
-        aws cloudfront create-invalidation --distribution-id E9THC5BV7JIGSY --paths "/*"
+        aws cloudfront create-invalidation --distribution-id E9THC5BV7JIGS --paths "/*"
