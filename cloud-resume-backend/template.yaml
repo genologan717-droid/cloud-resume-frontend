@@ -41,12 +41,26 @@ Resources:
               Resource: "*"
       Events:
         ChatApi:
-          Type: HttpApi  # Must be HttpApi to match ServerlessHttpApi
+          Type: HttpApi
           Properties:
             Path: /chat
             Method: post
-            ApiId: !Ref ServerlessHttpApi  # Ties it directly to your HTTP API resource
+            ApiId: !Ref ServerlessHttpApi
 
+  # 4. Define Global HTTP API Gateway Configuration
+  ServerlessHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: $default
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type
+          
 ServerlessHttpApi:
   Type: AWS::Serverless::HttpApi
   Properties:
