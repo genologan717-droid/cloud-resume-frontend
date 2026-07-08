@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  cloud-resume-backend
+  SAM Template for the Cloud Resume Challenge serverless backend infrastructure.
+
+Resources:
+  # 1. Define the DynamoDB Database Table
+  CloudResumeCounterTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: cloud-resume-counter
+      PrimaryKey:
+        Name: id
+        Type: String
+
+  # 2. Define the Lambda Function & API Gateway Route
+  CloudResumeCounterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: counter_function/
+      Handler: app.lambda_handler
+      Runtime: python3.12 # Ensure this matches the version you configured earlier
+      Policies:
+        # Give this Lambda function full permission to manage the table defined above
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CloudResumeCounterTable
+      Events:
+        # Automatically create an API Gateway HTTP API route mapping to the function
+        GetCounterApi:
+          Type: HttpApi
+          Properties:
+            Path: /counter
+            Method: get
+
+Outputs:
+  # This will print your brand new public Invoke URL right into the terminal on deployment
+  CloudResumeApiUrl:
+    Description: "Public API Gateway Endpoint URL"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/counter"
