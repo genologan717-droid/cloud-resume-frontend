@@ -45,4 +45,4 @@ Outputs:
   # This will print your brand new public Invoke URL right into the terminal on deployment
   CloudResumeApiUrl:
     Description: "Public API Gateway Endpoint URL"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/counter"
+    Value: !Sub "https://3lqz0x86qe.execute-api.us-east-2.amazonaws.com/counter"
