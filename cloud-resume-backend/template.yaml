@@ -40,23 +40,24 @@ Resources:
               Resource: "*"
       Events:
         ChatApi:
-          Type: HttpApi
+          Type: Api # Tells SAM to attach this to your existing REST API instead of HttpApi
           Properties:
             Path: /chat
             Method: post
-            ApiId: !Ref ServerlessHttpApi
+
+ServerlessHttpApi:
     Type: AWS::Serverless::HttpApi
     Properties:
-      # --- Add this exact block right here ---
+      StageName: $default # This ensures NO "/Prod" prefix is needed for /counter or /chat
       CorsConfiguration:
         AllowOrigins:
-          - "*" # Allows your CloudFront domain to make secure requests
+          - "*"
         AllowMethods:
           - POST
           - OPTIONS
         AllowHeaders:
-          - Content-Type          
-          
+          - Content-Type
+
 Events:
         # Automatically create an API Gateway HTTP API route mapping to the function
         GetCounterApi:
