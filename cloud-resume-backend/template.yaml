@@ -39,12 +39,12 @@ Resources:
               Action:
                 - bedrock:InvokeModel
               Resource: "*"
-      Events:
-        ChatApi:
-          Type: Api
-          Properties:
-            Path: /chat
-            Method: post
+    Events: # <--- THIS MUST HAVE EXACTLY 6 SPACES (matching Type and Properties above)
+      ChatApi:
+        Type: Api
+        Properties:
+          Path: /chat
+          Method: post
 
 Outputs:
   # This prints your public Invoke URL right into the terminal on deployment
