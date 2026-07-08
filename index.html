@@ -118,7 +118,67 @@
 
     // Run the function automatically as soon as the page loads
     getCounter();
+    // Replace this with your exact API Gateway base URL (the same one used for the counter)
+const baseApiURL = "https://3lqz0x86qe.execute-api.us-east-2.amazonaws.com";
+
+async function sendChat() {
+    const inputField = document.getElementById("chat-input");
+    const chatWindow = document.getElementById("chat-window");
+    const userText = inputField.value.trim();
+
+    if (!userText) return;
+
+    // 1. Display the user's message immediately
+    chatWindow.innerHTML += `<div style="margin-bottom: 8px;"><strong>You:</strong> ${userText}</div>`;
+    inputField.value = ""; // Clear input box
+    chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll to bottom
+
+    // 2. Display a temporary loading message
+    const loadingId = "loading-" + Date.now();
+    chatWindow.innerHTML += `<div id="${loadingId}" style="margin-bottom: 8px; color: #888;"><em>AI is thinking...</em></div>`;
+
+    try {
+        // 3. Make the POST request to your brand new /chat endpoint
+        let response = await fetch(`${baseApiURL}/chat`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "question": userText })
+        });
+        
+        let data = await response.json();
+        
+        // Remove loading indicator
+        document.getElementById(loadingId).remove();
+
+        // 4. Display the AI's response text
+        const aiReply = data.reply || data.error || "Sorry, I couldn't process that query.";
+        chatWindow.innerHTML += `<div style="margin-bottom: 8px;"><strong>AI:</strong> ${aiReply}</div>`;
+        
+    } catch (error) {
+        console.error("Error communicating with AI endpoint:", error);
+        document.getElementById(loadingId).innerHTML = `<span style="color: red;">Error connecting to AI assistant.</span>`;
+    }
+
+    chatWindow.scrollTop = chatWindow.scrollHeight; // Final scroll check
+}
+
+// Optional: Allow pressing "Enter" key to send messages automatically
+document.getElementById("chat-input")?.addEventListener("keypress", function(e) {
+    if (e.key === 'Enter') sendChat();
+});
 </script>
+<div id="ai-chat-container" style="max-width: 400px; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
+    <h3>🤖 AI Resume Assistant</h3>
+    <div id="chat-window" style="height: 200px; overflow-y: auto; border: 1px solid #eee; padding: 10px; margin-bottom: 10px; border-radius: 4px; background: #fafafa; text-align: left;">
+        <div style="color: #666; font-style: italic;">Ask me anything about their cloud skills or certifications!</div>
+    </div>
+    <div style="display: flex; gap: 5px;">
+        <input type="text" id="chat-input" placeholder="Type a question..." style="flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        <button onclick="sendChat()" style="padding: 8px 15px; background: #007acc; color: white; border: none; border-radius: 4px; cursor: pointer;">Send</button>
+    </div>
+</div>
 </body>
 
 </html>
