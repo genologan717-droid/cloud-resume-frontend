@@ -44,7 +44,18 @@ Resources:
           Properties:
             Path: /chat
             Method: post
-            ApiId: !Ref ServerlessHttpApi          
+            ApiId: !Ref ServerlessHttpApi
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      # --- Add this exact block right here ---
+      CorsConfiguration:
+        AllowOrigins:
+          - "*" # Allows your CloudFront domain to make secure requests
+        AllowMethods:
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type          
           
 Events:
         # Automatically create an API Gateway HTTP API route mapping to the function
