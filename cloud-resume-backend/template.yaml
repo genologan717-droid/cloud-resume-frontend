@@ -25,8 +25,8 @@ Resources:
         # Give this Lambda function full permission to manage the table defined above
         - DynamoDBCrudPolicy:
             TableName: !Ref CloudResumeCounterTable
-           
-CloudResumeAiFunction:
+  # 3. Create an AI Chatbot
+  CloudResumeAiFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ai_function/
@@ -44,7 +44,7 @@ CloudResumeAiFunction:
           Properties:
             Path: /chat
             Method: post
-            ApiId: !Ref ServerlessHttpApi
+            ApiId: !Ref ServerlessHttpApi          
           
 Events:
         # Automatically create an API Gateway HTTP API route mapping to the function
