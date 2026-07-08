@@ -5,15 +5,20 @@ import json
 bedrock = boto3.client(service_name="bedrock-runtime", region_name="us-east-2")
 
 def lambda_handler(event, context):
+    # 1. IMMEDIATELY handle browser CORS preflight requests
+    # If the browser is just asking for permission (OPTIONS), give it immediately
+    if event.get("requestContext", {}).get("http", {}).get("method", "") == "OPTIONS":
+        return build_response(200, {})
+
     try:
-        # 1. Parse user payload safely
+        # 2. Safely capture the question payload
         body = json.loads(event.get("body", "{}"))
         user_question = body.get("question", "")
 
         if not user_question:
             return build_response(400, {"error": "Missing question parameter"})
 
-        # 2. Establish your professional background instructions
+        # 3. Establish your professional background context profile
         system_prompt = """
         You are an AI Assistant representing a Cloud & Network Engineering student at Western Governors University (WGU).
         Use this data to guide responses:
@@ -24,9 +29,9 @@ def lambda_handler(event, context):
         Keep replies professional, friendly, and very short (1-3 sentences maximum). Pivot unrelated topics back to your qualifications.
         """
 
-        # 3. Call Bedrock using the simplified converse() method
+        # 4. Invoke the universal default Bedrock model
         response = bedrock.converse(
-            modelId="amazon.nova-micro-v1:0",
+            modelId="amazon.titan-text-express-v1", # Native, zero-setup required model
             messages=[{
                 "role": "user",
                 "content": [{"text": user_question}]
@@ -38,7 +43,7 @@ def lambda_handler(event, context):
             }
         )
 
-        # 4. Extract generated text from the standard structured map
+        # 5. Extract and parse generated text cleanly
         ai_reply = response["output"]["message"]["content"][0]["text"]
         return build_response(200, {"reply": ai_reply})
 
@@ -50,7 +55,7 @@ def build_response(status_code, body_content):
         "statusCode": status_code,
         "headers": {
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+            "Access-Control-Allow-Headers": "Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token",
             "Access-Control-Allow-Methods": "POST,OPTIONS",
             "Content-Type": "application/json"
         },
