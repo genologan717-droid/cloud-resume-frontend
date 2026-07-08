@@ -25,6 +25,27 @@ Resources:
         # Give this Lambda function full permission to manage the table defined above
         - DynamoDBCrudPolicy:
             TableName: !Ref CloudResumeCounterTable
+           
+CloudResumeAiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ai_function/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+              Resource: "*"
+      Events:
+        ChatApi:
+          Type: HttpApi
+          Properties:
+            Path: /chat
+            Method: post
+            ApiId: !Ref ServerlessHttpApi
+          
 Events:
         # Automatically create an API Gateway HTTP API route mapping to the function
         GetCounterApi:
