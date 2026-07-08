@@ -71,4 +71,4 @@ Resources:
 Outputs:
   CloudResumeApiUrl:
     Description: "Public API Gateway Endpoint URL"
-    Value: !Sub "https://3lqz0x86qe.execute-api.us-east-2.amazonaws.com/counter"
+    Value: !Sub " https://3lqz0x86qe.execute-api.us-east-2.amazonaws.com"
