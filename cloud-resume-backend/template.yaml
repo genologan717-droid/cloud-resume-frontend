@@ -29,23 +29,15 @@ Resources:
 # 3. Create an AI Chatbot
   CloudResumeAiFunction:
     Type: AWS::Serverless::Function
-    Properties:
+    Properties:        # 4 spaces
       CodeUri: ai_function/
       Handler: app.lambda_handler
-      Runtime: python3.12
-      Policies:
-        - Statement:
-            - Effect: Allow
-              Action:
-                - bedrock:InvokeModel
-              Resource: "*"
-    Events: # <--- THIS MUST HAVE EXACTLY 6 SPACES (matching Type and Properties above)
+    Events:            #  4 spaces (Aligned perfectly with Properties!)
       ChatApi:
         Type: Api
         Properties:
           Path: /chat
           Method: post
-
 Outputs:
   # This prints your public Invoke URL right into the terminal on deployment
   CloudResumeApiUrl:
