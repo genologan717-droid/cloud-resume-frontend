@@ -101,23 +101,24 @@
         <p>This page has been viewed <span id="counter" style="font-weight: bold; color: #007acc;">0</span> times.</p>
     </footer>
 
-    <script>
-        // Replace the URL below with your exact API Gateway Invoke URL + /counter
-        const apiURL = "https://caa4jyu2ci.execute-api.us-east-1.amazonaws.com/counter";
+<script>
+    // Replace the URL below with your exact API Gateway Invoke URL + /counter
+    const apiURL = "https://3lqz0x86qe.execute-api.us-east-2.amazonaws.com/counter";
 
-        async function getCounter() {
-            try {
-                let response = await fetch(apiURL);
-                let data = await response.json();
-                document.getElementById("counter").innerText = data.count;
-            } catch (error) {
-                console.error("Error fetching visitor counter:", error);
-            }
+    async function getCounter() {
+        try {
+            // We use the apiURL variable here cleanly with quotes fixed
+            let response = await fetch(apiURL);
+            let data = await response.json();
+            document.getElementById("counter").innerText = data.count;
+        } catch (error) {
+            console.error("Error fetching visitor counter:", error);
         }
+    }
 
-        // Run the function automatically as soon as the page loads
-        getCounter();
-    </script>
+    // Run the function automatically as soon as the page loads
+    getCounter();
+</script>
 </body>
 
 </html>
