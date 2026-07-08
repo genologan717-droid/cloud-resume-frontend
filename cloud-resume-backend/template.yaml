@@ -60,19 +60,6 @@ Resources:
           - OPTIONS
         AllowHeaders:
           - Content-Type
-          
-ServerlessHttpApi:
-  Type: AWS::Serverless::HttpApi
-  Properties:
-    StageName: $default
-    CorsConfiguration:
-      AllowOrigins:
-        - "*"
-      AllowMethods:
-        - POST
-        - OPTIONS
-      AllowHeaders:
-        - Content-Type
 
 Events:
         # Automatically create an API Gateway HTTP API route mapping to the function
