@@ -41,11 +41,16 @@ Resources:
               Resource: "*"
       Events:
         ChatApi:
-          Type: HttpApi
+          Type: Api
           Properties:
             Path: /chat
             Method: post
-            ApiId: !Ref ServerlessHttpApi
+
+Outputs:
+  # This prints your public Invoke URL right into the terminal on deployment
+  CloudResumeApiUrl:
+    Description: "Public API Gateway Endpoint URL"
+    Value: !Sub "https://3lqz0x86qe.execute-api.us-east-2.amazonaws.com/counter"
 
   # 4. Define Global HTTP API Gateway Configuration
   ServerlessHttpApi:
