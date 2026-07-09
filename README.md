@@ -12,12 +12,13 @@ A serverless resume (and trying to improve!) website developed in the cloud to s
 **Security:** Employed **Origin Access Identity (OAI)** to restrict access to the S3 bucket through CloudFront only, prohibiting any public direct-access.
 
 ## ⚠️ Challenges & Troubleshooting (The “Support” Insight) * **Problem:** Facing CORS (Cross-Origin Resource Sharing) issues when the front-end calls the API Gateway.   
-* **Solution:** Configure the API Gateway response headers to specifically allow my CloudFront distribution origin traffic. *
-* **Problem:** Errors when deploying because of IAM role permissions.
-* **Solution**: Reviewed CloudTrail logs to find the “AccessDenied” exception. Narrowed the Lambda role permissions down to the concept of least privilege. *
-* **Problem:** visitor count logic has stale data.   *
-* **Solution:** DynamoDB’s atomic updates were used to provide thread safety for increment operations.
-* 
+* **Issue:** Encountered CORS (Cross-Origin Resource Sharing) errors when the frontend attempted to call the API Gateway.
+  * **Solution:** Configured the API Gateway response headers to explicitly allow traffic from my CloudFront distribution origin.
+* **Issue:** Deployment failed due to IAM role permission errors.
+  * **Solution:** Analyzed CloudTrail logs to identify the "AccessDenied" exception and applied the principle of least privilege by scoping the Lambda role permissions.
+* **Issue:** Visitor count logic showed stale data.
+  * **Solution:** Implemented atomic updates in DynamoDB to ensure increment operations were thread-safe.
+
 * ## 🚀 Deploy 1. Clone your repo: `git clone [your-repo-link]`
 2. Configure your AWS Credentials.
 3. Run `[your-deploy-command, e.g., terraform apply]` to supply the backend.
